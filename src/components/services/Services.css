@@ -1,0 +1,30 @@
+.services-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.services-table th,
+.services-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.table-header{
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.table-container {
+    height: 320px;
+    overflow-y: auto;
+}
+
+.services-table-container {
+    width: 100%;
+}
+
+.services-table {
+    min-width: 700px;
+}

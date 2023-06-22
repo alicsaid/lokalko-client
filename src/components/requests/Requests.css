@@ -1,0 +1,41 @@
+.requests-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.requests-table th,
+.requests-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.status-not-started {
+    color: #DC3545;
+    font-weight: bold;
+}
+
+.status-started {
+    color: #3B9AFF;
+    font-weight: bold;
+}
+
+.status-finished {
+    color: #188130;
+    font-weight: bold;
+}
+
+.severity-high {
+    color: #DC3545;
+    font-weight: bold;
+}
+
+.severity-medium {
+    color: #FFC415;
+    font-weight: bold;
+}
+
+.severity-low {
+    color: #188130;
+    font-weight: bold;
+}
