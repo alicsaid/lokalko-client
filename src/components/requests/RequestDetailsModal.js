@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { TextField, FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
+import React, {useState, useEffect} from "react";
+import {Modal, Button} from "react-bootstrap";
+import {TextField, FormControl, InputLabel, Select, MenuItem, Box} from "@mui/material";
 import axios from "axios";
 
-function RequestDetailsModal({ show, handleClose, request }) {
+function RequestDetailsModal({show, handleClose, request}) {
     const [services, setServices] = useState([]);
     const [statuses, setStatuses] = useState([]);
     const [severity, setSeverity] = useState([]);
@@ -129,7 +129,7 @@ function RequestDetailsModal({ show, handleClose, request }) {
                             label="Category"
                         >
                             {categories?.map((category) => (
-                                <MenuItem key={category.service_id} value={category.category}>
+                                <MenuItem key={category.category_id} value={category.category}>
                                     {category.category}
                                 </MenuItem>
                             ))}

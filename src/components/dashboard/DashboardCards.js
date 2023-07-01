@@ -1,8 +1,8 @@
 import React from "react";
 import "./Dashboard.css";
-import { Card, CardContent, Typography } from "@mui/material";
-import { styled } from "@mui/system";
-import { AutoAwesomeMotion, CheckCircle, People, Error } from "@mui/icons-material";
+import {Card, CardContent, Typography} from "@mui/material";
+import {styled} from "@mui/system";
+import {AutoAwesomeMotion, CheckCircle, People, Error} from "@mui/icons-material";
 
 const DashboardCards = () => {
     const CardContainer = styled("div")({
@@ -34,7 +34,7 @@ const DashboardCards = () => {
             <CardWrapper>
                 <CardContentWrapper>
                     <IconContainer>
-                        <AutoAwesomeMotion fontSize="large" />
+                        <AutoAwesomeMotion fontSize="large"/>
                     </IconContainer>
                     <Typography gutterBottom variant="h5" component="div">
                         Most Common Issues
@@ -47,7 +47,7 @@ const DashboardCards = () => {
             <CardWrapper>
                 <CardContentWrapper>
                     <IconContainer>
-                        <People fontSize="large" />
+                        <People fontSize="large"/>
                     </IconContainer>
                     <Typography gutterBottom variant="h5" component="div">
                         Active Users
@@ -60,7 +60,7 @@ const DashboardCards = () => {
             <CardWrapper>
                 <CardContentWrapper>
                     <IconContainer>
-                        <Error fontSize="large" />
+                        <Error fontSize="large"/>
                     </IconContainer>
                     <Typography gutterBottom variant="h5" component="div">
                         Reported Issues
@@ -73,7 +73,7 @@ const DashboardCards = () => {
             <CardWrapper>
                 <CardContentWrapper>
                     <IconContainer>
-                        <CheckCircle fontSize="large" />
+                        <CheckCircle fontSize="large"/>
                     </IconContainer>
                     <Typography gutterBottom variant="h5" component="div">
                         Resolved Issues

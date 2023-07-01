@@ -3,10 +3,10 @@ import React from "react";
 // components
 import Navigation from "./Navigation";
 
-const Layout = ({ children }) => {
+const Layout = ({children}) => {
     return (
         <div className="layout">
-            <Navigation />
+            <Navigation/>
             <main>
                 {children}
             </main>

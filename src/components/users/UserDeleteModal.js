@@ -1,7 +1,7 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import {Modal, Button} from "react-bootstrap";
 
-function UserDeleteModal({ show, handleClose, handleDelete, user }) {
+function UserDeleteModal({show, handleClose, handleDelete, user}) {
     const handleConfirmDelete = () => {
         handleDelete(user?.userId);
     };

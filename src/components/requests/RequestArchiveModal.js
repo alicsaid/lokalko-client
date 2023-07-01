@@ -1,7 +1,7 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import {Modal, Button} from "react-bootstrap";
 
-function RequestArchiveModal({ show, handleClose, handleArchive, request }) {
+function RequestArchiveModal({show, handleClose, handleArchive, request}) {
     const handleArchiveClick = () => {
         handleArchive(request.request_id);
         handleClose();

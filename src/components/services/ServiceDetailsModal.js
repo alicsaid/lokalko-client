@@ -1,8 +1,8 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
-import { Box, TextField } from "@mui/material";
+import {Modal, Button} from "react-bootstrap";
+import {Box, TextField} from "@mui/material";
 
-function ServiceDetailsModal({ show, handleClose, service }) {
+function ServiceDetailsModal({show, handleClose, service}) {
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>

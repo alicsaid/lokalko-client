@@ -1,8 +1,8 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import {Modal, Button} from "react-bootstrap";
 import {Box, TextField} from "@mui/material";
 
-function UserDetailsModal({ show, handleClose, user }) {
+function UserDetailsModal({show, handleClose, user}) {
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
@@ -11,11 +11,18 @@ function UserDetailsModal({ show, handleClose, user }) {
             <Modal.Body>
                 <Box mb={2}>
                     <TextField
-                        label="Username"
-                        value={user?.username}
+                        label="First name"
+                        value={user?.first_name}
                         readOnly
                         fullWidth
-                        margin="normal"
+                    />
+                </Box>
+                <Box mb={2}>
+                    <TextField
+                        label="Last name"
+                        value={user?.last_name}
+                        readOnly
+                        fullWidth
                     />
                 </Box>
                 <Box mb={2}>
@@ -30,30 +37,6 @@ function UserDetailsModal({ show, handleClose, user }) {
                     <TextField
                         label="City"
                         value={user?.city}
-                        readOnly
-                        fullWidth
-                    />
-                </Box>
-                <Box mb={2}>
-                    <TextField
-                        label="Date of Birth"
-                        value={user?.date_of_birth}
-                        readOnly
-                        fullWidth
-                    />
-                </Box>
-                <Box mb={2}>
-                    <TextField
-                        label="Gender"
-                        value={user?.gender}
-                        readOnly
-                        fullWidth
-                    />
-                </Box>
-                <Box mb={2}>
-                    <TextField
-                        label="Telephone"
-                        value={user?.telephone}
                         readOnly
                         fullWidth
                     />

@@ -12,7 +12,7 @@ const Settings = () => {
                 <h1>Settings</h1>
                 <h5>Here you can modify settings of the aplication.</h5>
             </div>
-            <SettingsCards />
+            <SettingsCards/>
         </Layout>
     );
 };

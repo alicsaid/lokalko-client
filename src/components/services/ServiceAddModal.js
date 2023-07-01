@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { TextField } from "@mui/material";
+import React, {useState} from "react";
+import {Modal, Button} from "react-bootstrap";
+import {TextField} from "@mui/material";
 
-function ServiceAddModal({ show, handleClose, handleAddService }) {
+function ServiceAddModal({show, handleClose, handleAddService}) {
     const [newService, setNewService] = useState({
         service: "",
         address: "",

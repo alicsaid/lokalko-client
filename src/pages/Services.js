@@ -11,7 +11,7 @@ const Services = () => {
                 <h1>Services</h1>
                 <h5>This is a list of all available services.</h5>
             </div>
-            <ServicesTable />
+            <ServicesTable/>
         </Layout>
     );
 };

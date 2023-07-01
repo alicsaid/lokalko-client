@@ -11,7 +11,7 @@ const Dashboard = () => {
                 <h1>Dashboard</h1>
                 <h5>Welcome to ADMIN dashboard.</h5>
             </div>
-            <DashboardCards />
+            <DashboardCards/>
         </Layout>
     );
 };

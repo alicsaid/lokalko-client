@@ -1,7 +1,7 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import {Modal, Button} from "react-bootstrap";
 
-function ArchivedRequestDeleteModal({ show, handleClose, handleDelete, archivedRequest }) {
+function ArchivedRequestDeleteModal({show, handleClose, handleDelete, archivedRequest}) {
     const handleDeleteClick = () => {
         handleDelete(archivedRequest.archived_request_id);
         handleClose();

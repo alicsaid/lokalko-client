@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Card, CardContent, Typography } from "@mui/material";
-import { styled } from "@mui/system";
+import {Link} from "react-router-dom";
+import {Card, CardContent, Typography} from "@mui/material";
+import {styled} from "@mui/system";
 
 // CSS
 import "./Settings.css";

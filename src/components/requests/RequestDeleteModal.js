@@ -1,7 +1,7 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import {Modal, Button} from "react-bootstrap";
 
-function RequestDeleteModal({ show, handleClose, handleDelete, request }) {
+function RequestDeleteModal({show, handleClose, handleDelete, request}) {
     const handleDeleteClick = () => {
         handleDelete(request.request_id);
         handleClose();

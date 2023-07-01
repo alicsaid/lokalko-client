@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 
 // components & pages
 import Login from "../../pages/Login"
@@ -17,13 +17,13 @@ const AppRoutes = () => {
         <div>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/requests" element={<Requests />} />
-                    <Route path="/archived-requests" element={<ArchivedRequests />} />
-                    <Route path="/users" element={<Users />} />
-                    <Route path="/services" element={<Services />} />
-                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/" element={<Login/>}/>
+                    <Route path="/dashboard" element={<Dashboard/>}/>
+                    <Route path="/requests" element={<Requests/>}/>
+                    <Route path="/archived-requests" element={<ArchivedRequests/>}/>
+                    <Route path="/users" element={<Users/>}/>
+                    <Route path="/services" element={<Services/>}/>
+                    <Route path="/settings" element={<Settings/>}/>
                 </Routes>
             </BrowserRouter>
         </div>

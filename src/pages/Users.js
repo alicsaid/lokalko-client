@@ -11,7 +11,7 @@ const Requests = () => {
                 <h1>Users</h1>
                 <h5>This is a list of all registered users.</h5>
             </div>
-            <UsersTable />
+            <UsersTable/>
         </Layout>
     );
 };

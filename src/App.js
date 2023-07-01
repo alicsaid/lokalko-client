@@ -4,11 +4,11 @@ import React from "react";
 import AppRoutes from "./components/navigation/AppRoutes";
 
 function App() {
-  return (
-      <div>
-        <AppRoutes />
-      </div>
-  );
+    return (
+        <div>
+            <AppRoutes/>
+        </div>
+    );
 }
 
 export default App;

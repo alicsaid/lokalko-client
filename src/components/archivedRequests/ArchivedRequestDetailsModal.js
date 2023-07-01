@@ -1,8 +1,8 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import {Modal, Button} from "react-bootstrap";
 import {Box, TextField} from "@mui/material";
 
-function ArchivedRequestDetailsModal({ show, handleClose, archivedRequest }) {
+function ArchivedRequestDetailsModal({show, handleClose, archivedRequest}) {
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>

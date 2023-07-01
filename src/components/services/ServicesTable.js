@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
     Button,
     Table,
@@ -9,7 +9,7 @@ import {
     TableBody,
     TextField,
 } from "@mui/material";
-import { Info, Delete, Edit, Add } from "@mui/icons-material";
+import {Info, Delete, Edit, Add} from "@mui/icons-material";
 import axios from "axios";
 
 // Components
@@ -80,10 +80,10 @@ function ServicesTable() {
     };
 
     const columns = [
-        { field: "index", headerName: "No.", width: 100 },
-        { field: "service", headerName: "Service", width: 350 },
-        { field: "city", headerName: "City", width: 150 },
-        { field: "actions", headerName: "Actions", width: 450 },
+        {field: "index", headerName: "No.", width: 100},
+        {field: "service", headerName: "Service", width: 350},
+        {field: "city", headerName: "City", width: 150},
+        {field: "actions", headerName: "Actions", width: 450},
     ];
 
     useEffect(() => {
@@ -128,64 +128,64 @@ function ServicesTable() {
                     color="primary"
                     onClick={handleOpenAddModal}
                 >
-                    <Add /> Add Service
+                    <Add/> Add Service
                 </Button>
             </div>
 
             <div className="table-container">
                 <TableContainer>
                     <Table className="services-table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.field}
-                                    align="center"
-                                    width={column.width}
-                                    style={{ fontWeight: "600" }}
-                                >
-                                    {column.headerName}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {filteredRows.map((row) => (
-                            <TableRow key={row.index}>
-                                <TableCell align="center">{row.index}.</TableCell>
-                                <TableCell align="center">{row.service}</TableCell>
-                                <TableCell align="center">{row.city}</TableCell>
-                                <TableCell align="center">
-                                    <Button
-                                        variant="primary"
-                                        size="small"
-                                        onClick={() => handleOpenDetailsModal(row)}
-                                        style={{ color: "#3B9AFF" }}
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.field}
+                                        align="center"
+                                        width={column.width}
+                                        style={{fontWeight: "600"}}
                                     >
-                                        <Info />
-                                    </Button>
-
-                                    <Button
-                                        variant="warning"
-                                        size="small"
-                                        onClick={() => handleOpenEditModal(row)}
-                                        style={{ color: "#FFC107" }}
-                                    >
-                                        <Edit />
-                                    </Button>
-                                    <Button
-                                        variant="danger"
-                                        size="small"
-                                        onClick={() => handleOpenDeleteModal(row)}
-                                        style={{ color: "#DC3545" }}
-                                    >
-                                        <Delete />
-                                    </Button>
-                                </TableCell>
+                                        {column.headerName}
+                                    </TableCell>
+                                ))}
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {filteredRows.map((row) => (
+                                <TableRow key={row.index}>
+                                    <TableCell align="center">{row.index}.</TableCell>
+                                    <TableCell align="center">{row.service}</TableCell>
+                                    <TableCell align="center">{row.city}</TableCell>
+                                    <TableCell align="center">
+                                        <Button
+                                            variant="primary"
+                                            size="small"
+                                            onClick={() => handleOpenDetailsModal(row)}
+                                            style={{color: "#3B9AFF"}}
+                                        >
+                                            <Info/>
+                                        </Button>
+
+                                        <Button
+                                            variant="warning"
+                                            size="small"
+                                            onClick={() => handleOpenEditModal(row)}
+                                            style={{color: "#FFC107"}}
+                                        >
+                                            <Edit/>
+                                        </Button>
+                                        <Button
+                                            variant="danger"
+                                            size="small"
+                                            onClick={() => handleOpenDeleteModal(row)}
+                                            style={{color: "#DC3545"}}
+                                        >
+                                            <Delete/>
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </TableContainer>
             </div>
 

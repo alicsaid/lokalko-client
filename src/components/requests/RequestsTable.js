@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Button, Table, TableContainer, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import { Info, Archive, Delete } from "@mui/icons-material";
+import React, {useState, useEffect} from "react";
+import {Button, Table, TableContainer, TableHead, TableRow, TableCell, TableBody} from "@mui/material";
+import {Info, Archive, Delete} from "@mui/icons-material";
 import axios from "axios";
 
 // components
@@ -52,13 +52,13 @@ function RequestsTable() {
     };
 
     const columns = [
-        { field: "index", headerName: "No.", width: 80 },
-        { field: "title", headerName: "Title", width: 200 },
-        { field: "city", headerName: "City", width: 100 },
-        { field: "severity", headerName: "Severity", width: 120 },
-        { field: "assigned", headerName: "Assigned", width: 120 },
-        { field: "status", headerName: "Status", width: 120 },
-        { field: "actions", headerName: "Actions", width: 300 },
+        {field: "index", headerName: "No.", width: 80},
+        {field: "title", headerName: "Title", width: 200},
+        {field: "city", headerName: "City", width: 100},
+        {field: "severity", headerName: "Severity", width: 120},
+        {field: "assigned", headerName: "Assigned", width: 120},
+        {field: "status", headerName: "Status", width: 120},
+        {field: "actions", headerName: "Actions", width: 300},
     ];
 
     useEffect(() => {
@@ -83,7 +83,8 @@ function RequestsTable() {
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
-                                <TableCell key={column.field} align="center" width={column.width} style={{ fontWeight: "600" }}>
+                                <TableCell key={column.field} align="center" width={column.width}
+                                           style={{fontWeight: "600"}}>
                                     {column.headerName}
                                 </TableCell>
                             ))}
@@ -100,38 +101,39 @@ function RequestsTable() {
                                 </TableCell>
                                 <TableCell align="center">
                                     {row.service ? (
-                                        <span style={{ color: "#188130", fontWeight: "bold" }}>YES</span>
+                                        <span style={{color: "#188130", fontWeight: "bold"}}>YES</span>
                                     ) : (
-                                        <span style={{ color: "#DC3545", fontWeight: "bold" }}>NO</span>
+                                        <span style={{color: "#DC3545", fontWeight: "bold"}}>NO</span>
                                     )}
                                 </TableCell>
                                 <TableCell align="center">
-                                    <span className={`status-${row.status.toLowerCase().replace(/\s/g, '-')}`}>{row.status}</span>
+                                    <span
+                                        className={`status-${row.status.toLowerCase().replace(/\s/g, '-')}`}>{row.status}</span>
                                 </TableCell>
                                 <TableCell align="center">
                                     <Button
                                         variant="primary"
                                         size="small"
                                         onClick={() => handleOpenDetailsModal(row)}
-                                        style={{ color: '#3B9AFF' }}
+                                        style={{color: '#3B9AFF'}}
                                     >
-                                        <Info />
+                                        <Info/>
                                     </Button>
                                     <Button
                                         variant="warning"
                                         size="small"
                                         onClick={() => handleOpenArchiveModal(row)}
-                                        style={{ color: '#FFC415' }}
+                                        style={{color: '#FFC415'}}
                                     >
-                                        <Archive />
+                                        <Archive/>
                                     </Button>
                                     <Button
                                         variant="danger"
                                         size="small"
                                         onClick={() => handleOpenDeleteModal(row)}
-                                        style={{ color: '#DC3545' }}
+                                        style={{color: '#DC3545'}}
                                     >
-                                        <Delete />
+                                        <Delete/>
                                     </Button>
                                 </TableCell>
                             </TableRow>

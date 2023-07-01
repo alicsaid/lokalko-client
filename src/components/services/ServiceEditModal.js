@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { TextField } from "@mui/material";
+import React, {useState} from "react";
+import {Modal, Button} from "react-bootstrap";
+import {TextField} from "@mui/material";
 
-function ServiceEditModal({ show, handleClose, service, handleSave }) {
+function ServiceEditModal({show, handleClose, service, handleSave}) {
     const [name, setName] = useState(service ? service.service : "");
     const [address, setAddress] = useState(service ? service.address : "");
     const [city, setCity] = useState(service ? service.city : "");
