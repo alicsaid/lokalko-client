@@ -10,6 +10,14 @@
     text-align: center;
 }
 
+.archived-requests-table-container {
+    width: 100%;
+}
+
+.archived-requests-table {
+    min-width: 700px;
+}
+
 .status-not-started {
     color: #DC3545;
     font-weight: bold;

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import {Modal, Button} from "react-bootstrap";
-import {TextField} from "@mui/material";
+import {Modal} from "react-bootstrap";
+import {TextField, Button} from "@mui/material";
 
 function ServiceAddModal({show, handleClose, handleAddService}) {
     const [newService, setNewService] = useState({
@@ -19,6 +19,12 @@ function ServiceAddModal({show, handleClose, handleAddService}) {
 
     const handleAdd = () => {
         handleAddService(newService);
+        setNewService({
+            service: "",
+            address: "",
+            city: "",
+            telephone: "",
+        });
     };
 
     return (
@@ -79,12 +85,14 @@ function ServiceAddModal({show, handleClose, handleAddService}) {
                 </form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={handleAdd}>
-                    Add
-                </Button>
-                <Button variant="secondary" onClick={handleClose}>
-                    Cancel
-                </Button>
+                <div className="modal-buttons">
+                    <Button className="close-button" variant="outlined" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button className="save-button" variant="outlined" onClick={handleAdd}>
+                        Add
+                    </Button>
+                </div>
             </Modal.Footer>
         </Modal>
     );

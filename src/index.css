@@ -13,7 +13,7 @@ a {
 }
 
 .page-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 /* media queries */
@@ -46,4 +46,59 @@ a {
     .mobile-menu {
         display: block;
     }
+}
+
+/* NOT FOUND PAGE */
+
+.notFound-page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.h1-404 {
+    font-size: 7.5em;
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+.h2-404 {
+    font-weight: bold;
+}
+
+.modal-buttons {
+    width: 12rem;
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-around;
+}
+
+.close-button {
+    width: 5rem;
+    background-color: #9a9a9a !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.save-button {
+    width: 5rem;
+    background-color: #188130 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.delete-button {
+    width: 5rem;
+    background-color: #a91616 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.archive-button {
+    width: 5rem;
+    background-color: #dc9a18 !important;
+    color: #ffffff !important;
+    border: none !important;
 }

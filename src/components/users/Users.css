@@ -9,3 +9,11 @@
     padding: 8px;
     text-align: center;
 }
+
+.users-table-container {
+    width: 100%;
+}
+
+.users-table {
+    min-width: 700px;
+}

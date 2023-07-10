@@ -1,20 +1,27 @@
 import React, {useState, useEffect} from "react";
-import {Modal, Button} from "react-bootstrap";
-import {TextField, FormControl, InputLabel, Select, MenuItem, Box} from "@mui/material";
+import {Modal} from "react-bootstrap";
+import {Button, TextField, FormControl, InputLabel, Select, MenuItem, Box} from "@mui/material";
 import axios from "axios";
 
-function RequestDetailsModal({show, handleClose, request}) {
+function RequestDetailsModal({show, handleClose, handleSave, request}) {
     const [services, setServices] = useState([]);
     const [statuses, setStatuses] = useState([]);
-    const [severity, setSeverity] = useState([]);
+    const [severities, setSeverities] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState("");
+    const [service, setService] = useState("");
+    const [severity, setSeverity] = useState("");
+    const [status, setStatus] = useState("");
+
+    //console.log("category:", category);
 
     useEffect(() => {
         axios
             .get("/admin/services")
             .then((response) => {
                 const services = response.data.services.map((service) => ({
-                    ...service,
+                    id: service.service_id,
+                    service: service.service,
                 }));
                 setServices(services);
             })
@@ -36,13 +43,13 @@ function RequestDetailsModal({show, handleClose, request}) {
             });
 
         axios
-            .get("/admin/severity")
+            .get("/admin/severities")
             .then((response) => {
-                const severity = response.data.severity.map((severity) => ({
+                const severities = response.data.severities.map((severity) => ({
                     id: severity.severity_id,
                     severity: severity.severity,
                 }));
-                setSeverity(severity);
+                setSeverities(severities);
             })
             .catch((error) => {
                 console.error(error);
@@ -61,6 +68,43 @@ function RequestDetailsModal({show, handleClose, request}) {
                 console.error(error);
             });
     }, []);
+
+    useEffect(() => {
+        if (request) {
+            setCategory(request.category || "");
+            setService(request.service || "");
+            setSeverity(request.severity || "");
+            setStatus(request.status || "");
+        }
+    }, [request]);
+
+    const handleCategoryChange = (event) => {
+        setCategory(event.target.value);
+    };
+
+    const handleServiceChange = (event) => {
+        setService(event.target.value);
+    };
+
+    const handleSeverityChange = (event) => {
+        setSeverity(event.target.value);
+    };
+
+    const handleStatusChange = (event) => {
+        setStatus(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const updatedRequest = {
+            ...request,
+            category: category,
+            service: service,
+            severity: severity,
+            status: status,
+        };
+        handleSave(updatedRequest);
+    };
 
     return (
         <Modal show={show} onHide={handleClose} centered>
@@ -91,32 +135,28 @@ function RequestDetailsModal({show, handleClose, request}) {
                         label="Date reported"
                         value={request?.date}
                         readOnly
-                        fullWidth
-                    />
+                        fullWidth/>
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Time reported"
                         value={request?.time}
                         readOnly
-                        fullWidth
-                    />
+                        fullWidth/>
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Address"
                         value={request?.address}
                         readOnly
-                        fullWidth
-                    />
+                        fullWidth/>
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="City"
                         value={request?.city}
                         readOnly
-                        fullWidth
-                    />
+                        fullWidth/>
                 </Box>
                 <Box mb={2}>
                     <FormControl fullWidth>
@@ -124,12 +164,12 @@ function RequestDetailsModal({show, handleClose, request}) {
                         <Select
                             labelId="category-label"
                             id="category-select"
-                            value={request?.category}
-                            onChange={(event) => console.log(event.target.value)}
+                            value={category}
+                            onChange={handleCategoryChange}
                             label="Category"
                         >
                             {categories?.map((category) => (
-                                <MenuItem key={category.category_id} value={category.category}>
+                                <MenuItem key={category.id} value={category.category}>
                                     {category.category}
                                 </MenuItem>
                             ))}
@@ -142,13 +182,13 @@ function RequestDetailsModal({show, handleClose, request}) {
                         <Select
                             labelId="service-label"
                             id="service-select"
-                            value={request?.service}
-                            onChange={(event) => console.log(event.target.value)}
+                            value={service}
+                            onChange={handleServiceChange}
                             label="Service"
                         >
                             <MenuItem value="">Select a service</MenuItem>
                             {services?.map((service) => (
-                                <MenuItem key={service.service_id} value={service.service}>
+                                <MenuItem key={service.id} value={service.service}>
                                     {service.service}
                                 </MenuItem>
                             ))}
@@ -161,11 +201,11 @@ function RequestDetailsModal({show, handleClose, request}) {
                         <Select
                             labelId="severity-label"
                             id="severity-select"
-                            value={request?.severity}
-                            onChange={(event) => console.log(event.target.value)}
+                            value={severity}
+                            onChange={handleSeverityChange}
                             label="Severity"
                         >
-                            {severity?.map((severity) => (
+                            {severities?.map((severity) => (
                                 <MenuItem key={severity.id} value={severity.severity}>
                                     {severity.severity}
                                 </MenuItem>
@@ -179,8 +219,8 @@ function RequestDetailsModal({show, handleClose, request}) {
                         <Select
                             labelId="status-label"
                             id="status-select"
-                            value={request?.status}
-                            onChange={(event) => console.log(event.target.value)}
+                            value={status}
+                            onChange={handleStatusChange}
                             label="Status"
                         >
                             {statuses?.map((status) => (
@@ -193,12 +233,14 @@ function RequestDetailsModal({show, handleClose, request}) {
                 </Box>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="success" onClick={handleClose}>
-                    Save
-                </Button>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
+                <div className="modal-buttons">
+                    <Button className="close-button" variant="outlined" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button className="save-button" variant="outlined" onClick={handleSubmit}>
+                        Save
+                    </Button>
+                </div>
             </Modal.Footer>
         </Modal>
     );

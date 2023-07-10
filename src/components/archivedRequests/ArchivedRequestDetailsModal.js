@@ -1,8 +1,8 @@
 import React from "react";
-import {Modal, Button} from "react-bootstrap";
-import {Box, TextField} from "@mui/material";
+import {Modal} from "react-bootstrap";
+import {Box, TextField, Button} from "@mui/material";
 
-function ArchivedRequestDetailsModal({show, handleClose, archivedRequest}) {
+function ArchivedRequestDetailsModal({show, handleClose, request}) {
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
@@ -12,88 +12,118 @@ function ArchivedRequestDetailsModal({show, handleClose, archivedRequest}) {
                 <Box mb={2}>
                     <TextField
                         label="Title"
-                        value={archivedRequest?.title}
+                        value={request?.title}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Description"
-                        value={archivedRequest?.description}
+                        value={request?.description}
                         readOnly
                         multiline
                         rows={3}
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Date reported"
-                        value={archivedRequest?.date}
+                        value={request?.date}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Time reported"
-                        value={archivedRequest?.time}
+                        value={request?.time}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Address"
-                        value={archivedRequest?.address}
+                        value={request?.address}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="City"
-                        value={archivedRequest?.city}
+                        value={request?.city}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Category"
-                        value={archivedRequest?.category}
+                        value={request?.category}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Service"
-                        value={archivedRequest?.service}
+                        value={request?.service}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Severity"
-                        value={archivedRequest?.severity}
+                        value={request?.severity}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <Box mb={2}>
                     <TextField
                         label="Status"
-                        value={archivedRequest?.status}
+                        value={request?.status}
                         readOnly
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button className="close-button" variant="outlined" onClick={handleClose}>
                     Close
                 </Button>
             </Modal.Footer>

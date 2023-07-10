@@ -1,6 +1,6 @@
 import React from "react";
-import {Modal, Button} from "react-bootstrap";
-import {Box, TextField} from "@mui/material";
+import {Modal} from "react-bootstrap";
+import {Box, TextField, Button} from "@mui/material";
 
 function ServiceDetailsModal({show, handleClose, service}) {
     return (
@@ -43,7 +43,7 @@ function ServiceDetailsModal({show, handleClose, service}) {
                 </Box>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button className="close-button" variant="outlined" onClick={handleClose}>
                     Close
                 </Button>
             </Modal.Footer>

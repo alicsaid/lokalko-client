@@ -1,5 +1,6 @@
 import React from "react";
-import {Modal, Button} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
+import {Button} from "@mui/material";
 
 function ServiceDeleteModal({show, handleClose, handleDelete, service}) {
     const handleDeleteClick = () => {
@@ -16,12 +17,14 @@ function ServiceDeleteModal({show, handleClose, handleDelete, service}) {
                 <p>Are you sure you want to delete this service?</p>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Cancel
-                </Button>
-                <Button variant="danger" onClick={handleDeleteClick}>
-                    Delete
-                </Button>
+                <div className="modal-buttons">
+                    <Button className="close-button" variant="outlined" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button className="delete-button" variant="outlined" onClick={handleDeleteClick}>
+                        Delete
+                    </Button>
+                </div>
             </Modal.Footer>
         </Modal>
     );

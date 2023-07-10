@@ -1,9 +1,12 @@
 import React from "react";
-import {Modal, Button} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
+import {Button} from '@mui/material';
 
 function UserDeleteModal({show, handleClose, handleDelete, user}) {
     const handleConfirmDelete = () => {
-        handleDelete(user?.userId);
+        //console.log(user.user_id)
+        //console.log(user)
+        handleDelete(user.user_id);
     };
 
     return (
@@ -15,12 +18,14 @@ function UserDeleteModal({show, handleClose, handleDelete, user}) {
                 <p>Are you sure you want to delete this user?</p>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Cancel
-                </Button>
-                <Button variant="danger" onClick={handleConfirmDelete}>
-                    Delete
-                </Button>
+                <div className="modal-buttons">
+                    <Button className="close-button" variant="outlined" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button className="delete-button" variant="outlined" onClick={handleConfirmDelete}>
+                        Delete
+                    </Button>
+                </div>
             </Modal.Footer>
         </Modal>
     );

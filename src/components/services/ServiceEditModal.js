@@ -1,26 +1,31 @@
-import React, {useState} from "react";
-import {Modal, Button} from "react-bootstrap";
-import {TextField} from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {Modal} from "react-bootstrap";
+import {TextField, Button} from "@mui/material";
 
 function ServiceEditModal({show, handleClose, service, handleSave}) {
-    const [name, setName] = useState(service ? service.service : "");
-    const [address, setAddress] = useState(service ? service.address : "");
-    const [city, setCity] = useState(service ? service.city : "");
-    const [telephone, setTelephone] = useState(service ? service.telephone : "");
+    const [serviceName, setServiceName] = useState("");
+    const [address, setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [telephone, setTelephone] = useState("");
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
+    useEffect(() => {
+        if (service) {
+            setServiceName(service.service || "");
+            setAddress(service.address || "");
+            setCity(service.city || "");
+            setTelephone(service.telephone || "");
+        }
+    }, [service]);
 
-        // Create updated service object
+    const handleSubmit = (event) => {
+        event.preventDefault();
         const updatedService = {
-            ...service,
-            name: name,
+            service_id: service.service_id,
+            service: serviceName,
             address: address,
             city: city,
-            telephone: telephone,
+            telephone: telephone
         };
-
-        // Call the handleSave function with the updated service object
         handleSave(updatedService);
     };
 
@@ -30,18 +35,19 @@ function ServiceEditModal({show, handleClose, service, handleSave}) {
                 <Modal.Title>Edit Service</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <form onSubmit={handleFormSubmit}>
+                <form>
                     <div className="mb-3">
                         <TextField
-                            label="Name"
+                            label="Service"
                             variant="outlined"
                             size="small"
-                            value={name}
-                            onChange={(e) => setName(e.target.value.slice(0, 50))}
+                            name="service"
                             className="w-100"
                             required
+                            value={serviceName}
+                            onChange={(event) => setServiceName(event.target.value)}
                             inputProps={{
-                                maxLength: 30,
+                                maxLength: 30
                             }}
                         />
                     </div>
@@ -50,12 +56,13 @@ function ServiceEditModal({show, handleClose, service, handleSave}) {
                             label="Address"
                             variant="outlined"
                             size="small"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value.slice(0, 50))}
+                            name="address"
                             className="w-100"
                             required
+                            value={address}
+                            onChange={(event) => setAddress(event.target.value)}
                             inputProps={{
-                                maxLength: 30,
+                                maxLength: 30
                             }}
                         />
                     </div>
@@ -64,10 +71,11 @@ function ServiceEditModal({show, handleClose, service, handleSave}) {
                             label="City"
                             variant="outlined"
                             size="small"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
+                            name="city"
                             className="w-100"
                             required
+                            value={city}
+                            onChange={(event) => setCity(event.target.value)}
                         />
                     </div>
                     <div className="mb-3">
@@ -75,21 +83,24 @@ function ServiceEditModal({show, handleClose, service, handleSave}) {
                             label="Telephone"
                             variant="outlined"
                             size="small"
-                            value={telephone}
-                            onChange={(e) => setTelephone(e.target.value)}
+                            name="telephone"
                             className="w-100"
                             required
+                            value={telephone}
+                            onChange={(event) => setTelephone(event.target.value)}
                         />
                     </div>
                 </form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="success" type="submit">
-                    Save
-                </Button>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
+                <div className="modal-buttons">
+                    <Button className="close-button" variant="outlined" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button className="save-button" variant="outlined" onClick={handleSubmit}>
+                        Save
+                    </Button>
+                </div>
             </Modal.Footer>
         </Modal>
     );

@@ -1,6 +1,6 @@
 import React from "react";
-import {Modal, Button} from "react-bootstrap";
-import {Box, TextField} from "@mui/material";
+import {Modal} from "react-bootstrap";
+import {Box, TextField, Button} from "@mui/material";
 
 function UserDetailsModal({show, handleClose, user}) {
     return (
@@ -43,7 +43,7 @@ function UserDetailsModal({show, handleClose, user}) {
                 </Box>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button className="close-button" variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
             </Modal.Footer>

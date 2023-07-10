@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Container,
     Card,
@@ -8,86 +8,113 @@ import {
     Button,
     Grid,
     FormControl,
-    InputAdornment,
-    IconButton,
     Box
 } from '@mui/material';
-import {Link} from "react-router-dom";
-import "./Login.css";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
+import axios from 'axios';
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const [showPassword, setShowPassword] = React.useState(false);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (email === '' || password === '') {
+                toast.error('Please fill in all fields!');
+                return;
+            }
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
+            const response = await axios.post('/admin/login', {
+                email: email,
+                password: password
+            });
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
+            console.log(response)
+
+            if (response.data.message === 'Logged in successfully!') {
+                window.location.href = '/dashboard';
+            } else {
+                toast.error(response.data.message);
+                console.log('Auth not good!');
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
-        <Container maxWidth="lg" className="login-container">
-            <Grid container spacing={0}>
-                <Grid item xs={12} md={6} className="login-image-container">
-                    <img src="https://source.unsplash.com/random/800x600/?nature" alt="random" className="login-image"/>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Card sx={{background: "#f6f6f6"}}>
-                        <CardContent className="m-5">
-                            <Typography variant="h4" align="center" mt={2} mb={2} style={{color: "#303f9f"}}>
-                                Admin Login
-                            </Typography>
-                            <Typography variant="subtitle1" align="center" mt={2} mb={4} style={{color: "#757575"}}>
-                                WELCOME TO LOKALKO
-                            </Typography>
-                            <form noValidate autoComplete="off">
-                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                    <Box>
-                                        <TextField
-                                            label="Email"
-                                            id="defaultLoginEmail"
-                                            type="email"
-                                            margin="normal"
-                                            variant="outlined"
-                                        />
-                                    </Box>
-                                    <Box sx={{display: 'flex', alignItems: 'flex-end'}}>
-                                        <FormControl variant="outlined">
+        <div>
+            <Container maxWidth="lg" className="login-container">
+                <Grid container spacing={0}>
+                    <Grid item xs={12} md={6} className="login-image-container">
+                        <img src="https://source.unsplash.com/random/800x600/?nature" alt="random"
+                             className="login-image"/>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Card sx={{background: '#f6f6f6'}}>
+                            <CardContent className="m-5">
+                                <Typography variant="h4" align="center" mt={2} mb={2} style={{color: '#303f9f'}}>
+                                    Admin Login
+                                </Typography>
+                                <Typography variant="subtitle1" align="center" mt={2} mb={4} style={{color: '#757575'}}>
+                                    WELCOME TO LOKALKO
+                                </Typography>
+                                <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                        <Box>
                                             <TextField
-                                                id="defaultLoginPassword"
+                                                required
+                                                label="Email"
+                                                id="defaultLoginEmail"
+                                                type="email"
+                                                name="email"
                                                 margin="normal"
                                                 variant="outlined"
-                                                type={showPassword ? 'text' : 'password'}
-                                                endAdornment={
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            aria-label="toggle password visibility"
-                                                            onClick={handleClickShowPassword}
-                                                            onMouseDown={handleMouseDownPassword}
-                                                            edge="end"
-                                                        >
-                                                            {showPassword ? <VisibilityOff/> : <Visibility/>}
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                }
-                                                label="Password"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
                                             />
-                                        </FormControl>
-                                    </Box>
-                                    <Link to="/dashboard" style={{textDecoration: 'none'}}>
-                                        <Button variant="contained" color="primary" style={{marginTop: '2rem'}}>
+                                        </Box>
+                                        <Box sx={{display: 'flex', alignItems: 'flex-end'}}>
+                                            <FormControl variant="outlined">
+                                                <TextField
+                                                    required
+                                                    id="defaultLoginPassword"
+                                                    margin="normal"
+                                                    variant="outlined"
+                                                    type='password'
+                                                    name='password'
+                                                    label="Password"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                />
+                                            </FormControl>
+                                        </Box>
+                                        <Button variant="contained" color="primary" style={{marginTop: '2rem'}}
+                                                type="submit">
                                             Login
                                         </Button>
-                                    </Link>
-                                </Box>
-                            </form>
-                        </CardContent>
-                    </Card>
+                                    </Box>
+                                </form>
+                            </CardContent>
+                        </Card>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Container>
+            </Container>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+        </div>
     );
 };
 

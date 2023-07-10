@@ -2,6 +2,8 @@ import React, {useState, useEffect} from "react";
 import {Button, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TextField} from "@mui/material";
 import {Info, Delete} from "@mui/icons-material";
 import axios from "axios";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 // Components
 import UserDetailsModal from "./UserDetailsModal";
@@ -34,9 +36,18 @@ function UsersTable() {
     };
 
     const handleDelete = (userId) => {
-        // Handle delete logic here
-        console.log("Deleting user with ID:", userId);
-        handleCloseModals();
+        axios
+            .delete(`/admin/users/${userId}/delete/`)
+            .then((response) => {
+                console.log("User deleted");
+                setRows((prevRows) => prevRows.filter((row) => row.user_id !== userId));
+                toast.success('User deleted!');
+                handleCloseModals();
+            })
+            .catch((error) => {
+                console.error("Error deleting user:", error);
+                toast.error('Error deleting user!');
+            });
     };
 
     const handleSearch = (event) => {
@@ -46,8 +57,8 @@ function UsersTable() {
     const columns = [
         {field: "index", headerName: "No.", width: 100},
         {field: "email", headerName: "Email", width: 400},
-        {field: "city", headerName: "City", width: 220},
-        {field: "actions", headerName: "Actions", width: 200},
+        {field: "city", headerName: "City", width: 250},
+        {field: "actions", headerName: "Actions", width: 330},
     ];
 
     useEffect(() => {
@@ -88,7 +99,7 @@ function UsersTable() {
                 />
             </div>
 
-            <TableContainer>
+            <TableContainer className="table-container">
                 <Table className="users-table">
                     <TableHead>
                         <TableRow>
@@ -105,31 +116,39 @@ function UsersTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredRows.map((row) => (
-                            <TableRow key={row.index}>
-                                <TableCell align="center">{row.index}.</TableCell>
-                                <TableCell align="center">{row.email}</TableCell>
-                                <TableCell align="center">{row.city}</TableCell>
-                                <TableCell align="center">
-                                    <Button
-                                        variant="primary"
-                                        size="small"
-                                        onClick={() => handleOpenDetailsModal(row)}
-                                        style={{color: "#3B9AFF"}}
-                                    >
-                                        <Info/>
-                                    </Button>
-                                    <Button
-                                        variant="danger"
-                                        size="small"
-                                        onClick={() => handleOpenDeleteModal(row)}
-                                        style={{color: "#DC3545"}}
-                                    >
-                                        <Delete/>
-                                    </Button>
+                        {filteredRows.length === 0 ? (
+                            <TableRow>
+                                <TableCell align="center" colSpan={columns.length}>
+                                    No users found.
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        ) : (
+                            filteredRows.map((row) => (
+                                <TableRow key={row.index}>
+                                    <TableCell align="center">{row.index}.</TableCell>
+                                    <TableCell align="center">{row.email}</TableCell>
+                                    <TableCell align="center">{row.city}</TableCell>
+                                    <TableCell align="center">
+                                        <Button
+                                            variant="primary"
+                                            size="small"
+                                            onClick={() => handleOpenDetailsModal(row)}
+                                            style={{ color: "#3B9AFF" }}
+                                        >
+                                            <Info />
+                                        </Button>
+                                        <Button
+                                            variant="danger"
+                                            size="small"
+                                            onClick={() => handleOpenDeleteModal(row)}
+                                            style={{ color: "#DC3545" }}
+                                        >
+                                            <Delete />
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -145,6 +164,19 @@ function UsersTable() {
                 handleClose={handleCloseModals}
                 handleDelete={handleDelete}
                 user={selectedUser}
+            />
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
             />
         </div>
     );

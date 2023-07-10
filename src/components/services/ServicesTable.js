@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import {Info, Delete, Edit, Add} from "@mui/icons-material";
 import axios from "axios";
+import {toast, ToastContainer} from "react-toastify";
 
 // Components
 import ServiceDetailsModal from "./ServiceDetailsModal";
@@ -58,33 +59,87 @@ function ServicesTable() {
     };
 
     const handleDelete = (serviceId) => {
-        // Handle delete logic here
-        console.log("Deleting service with ID:", serviceId);
-        handleCloseModals();
+        axios
+            .delete(`/admin/services/${serviceId}/delete/`)
+            .then((response) => {
+                console.log("Service deleted:", response.data);
+                setRows((prevRows) => prevRows.filter((row) => row.service_id !== serviceId));
+                toast.success('Service deleted!');
+                handleCloseModals();
+            })
+            .catch((error) => {
+                console.error("Error deleting service:", error);
+                toast.error('Error deleting service!');
+            });
     };
 
     const handleSave = (updatedService) => {
-        // Handle save logic here
         console.log("Saving updated service:", updatedService);
-        handleCloseModals();
+
+        const { service_id, service, address, city, telephone } = updatedService;
+
+        const data = {
+            service_id,
+            service,
+            address,
+            city,
+            telephone,
+        };
+
+        axios
+            .put(`/admin/services/${service_id}/update/`, data)
+            .then((response) => {
+                console.log("Service updated:", response.data);
+
+                // Update the rows state with the updated service
+                setRows((prevRows) =>
+                    prevRows.map((row) =>
+                        row.service_id === service_id ? { ...row, ...updatedService } : row
+                    )
+                );
+
+                toast.success("Service updated!");
+                handleCloseModals();
+            })
+            .catch((error) => {
+                console.error("Error updating service:", error);
+                toast.error("Error updating service!");
+            });
     };
 
     const handleAddService = (newService) => {
-        // Handle add service logic here
+
         console.log("Adding new service:", newService);
-        handleCloseModals();
+
+        const {service, address, city, telephone} = newService;
+
+        const data = {
+            service,
+            address,
+            city,
+            telephone
+        };
+
+        axios
+            .post("/admin/services/create/", data)
+            .then((response) => {
+                console.log("Service added:", response.data);
+                const newIndex = rows.length + 1;
+
+                const newServiceWithIndex = { ...newService, index: newIndex };
+                setRows((prevRows) => [...prevRows, newServiceWithIndex]);
+                toast.success('Service created!');
+                handleCloseModals();
+            })
+            .catch((error) => {
+                console.error("Error adding service:", error);
+                toast.error('Error creating service!');
+            });
     };
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
     };
-
-    const columns = [
-        {field: "index", headerName: "No.", width: 100},
-        {field: "service", headerName: "Service", width: 350},
-        {field: "city", headerName: "City", width: 150},
-        {field: "actions", headerName: "Actions", width: 450},
-    ];
 
     useEffect(() => {
         axios
@@ -94,6 +149,7 @@ function ServicesTable() {
                     ...service,
                     index: index + 1,
                 }));
+                //console.log(response.data)
                 setRows(services);
                 setFilteredRows(services);
             })
@@ -112,6 +168,13 @@ function ServicesTable() {
             setFilteredRows(filteredData);
         }
     }, [searchTerm, rows]);
+
+    const columns = [
+        {field: "index", headerName: "No.", width: 130},
+        {field: "service", headerName: "Service", width: 350},
+        {field: "city", headerName: "City", width: 150},
+        {field: "actions", headerName: "Actions", width: 450},
+    ];
 
     return (
         <div>
@@ -150,40 +213,47 @@ function ServicesTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredRows.map((row) => (
-                                <TableRow key={row.index}>
-                                    <TableCell align="center">{row.index}.</TableCell>
-                                    <TableCell align="center">{row.service}</TableCell>
-                                    <TableCell align="center">{row.city}</TableCell>
-                                    <TableCell align="center">
-                                        <Button
-                                            variant="primary"
-                                            size="small"
-                                            onClick={() => handleOpenDetailsModal(row)}
-                                            style={{color: "#3B9AFF"}}
-                                        >
-                                            <Info/>
-                                        </Button>
-
-                                        <Button
-                                            variant="warning"
-                                            size="small"
-                                            onClick={() => handleOpenEditModal(row)}
-                                            style={{color: "#FFC107"}}
-                                        >
-                                            <Edit/>
-                                        </Button>
-                                        <Button
-                                            variant="danger"
-                                            size="small"
-                                            onClick={() => handleOpenDeleteModal(row)}
-                                            style={{color: "#DC3545"}}
-                                        >
-                                            <Delete/>
-                                        </Button>
+                            {filteredRows.length === 0 ? (
+                                <TableRow>
+                                    <TableCell align="center" colSpan={columns.length}>
+                                        No services found.
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            ) : (
+                                filteredRows.map((row) => (
+                                    <TableRow key={row.index}>
+                                        <TableCell align="center">{row.index}.</TableCell>
+                                        <TableCell align="center">{row.service}</TableCell>
+                                        <TableCell align="center">{row.city}</TableCell>
+                                        <TableCell align="center">
+                                            <Button
+                                                variant="primary"
+                                                size="small"
+                                                onClick={() => handleOpenDetailsModal(row)}
+                                                style={{color: "#3B9AFF"}}
+                                            >
+                                                <Info/>
+                                            </Button>
+                                            <Button
+                                                variant="warning"
+                                                size="small"
+                                                onClick={() => handleOpenEditModal(row)}
+                                                style={{ color: "#FFC107" }}
+                                            >
+                                                <Edit />
+                                            </Button>
+                                            <Button
+                                                variant="danger"
+                                                size="small"
+                                                onClick={() => handleOpenDeleteModal(row)}
+                                                style={{color: "#DC3545"}}
+                                            >
+                                                <Delete/>
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -213,6 +283,19 @@ function ServicesTable() {
                 show={showAddModal}
                 handleClose={handleCloseModals}
                 handleAddService={handleAddService}
+            />
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
             />
         </div>
     );

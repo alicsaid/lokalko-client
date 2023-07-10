@@ -1,10 +1,29 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./Dashboard.css";
 import {Card, CardContent, Typography} from "@mui/material";
 import {styled} from "@mui/system";
 import {AutoAwesomeMotion, CheckCircle, People, Error} from "@mui/icons-material";
+import axios from "axios";
 
 const DashboardCards = () => {
+
+    const [userData, setUserData] = useState(null);
+    const [totalRequests, setTotalRequests] = useState(null);
+    const [finishedRequests, setFinishedRequests] = useState(null);
+
+    useEffect(() => {
+        axios
+            .get("/admin/dashboard-analytics/")
+            .then((response) => {
+                setUserData(response.data.userData[0].usercount);
+                setTotalRequests(response.data.totalRequests[0].totalrequests);
+                setFinishedRequests(response.data.finishedRequests[0].finishedrequests);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
     const CardContainer = styled("div")({
         display: "flex",
         flexDirection: "row",
@@ -34,7 +53,7 @@ const DashboardCards = () => {
             <CardWrapper>
                 <CardContentWrapper>
                     <IconContainer>
-                        <AutoAwesomeMotion fontSize="large"/>
+                        <AutoAwesomeMotion fontSize="large" style={{ color: "rgb(104,104,196)" }}/>
                     </IconContainer>
                     <Typography gutterBottom variant="h5" component="div">
                         Most Common Issues
@@ -47,39 +66,39 @@ const DashboardCards = () => {
             <CardWrapper>
                 <CardContentWrapper>
                     <IconContainer>
-                        <People fontSize="large"/>
+                        <People fontSize="large" style={{ color: "rgb(206,196,5)" }}/>
                     </IconContainer>
                     <Typography gutterBottom variant="h5" component="div">
                         Active Users
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        328
+                        {userData !== null ? userData : "Loading..."}
                     </Typography>
                 </CardContentWrapper>
             </CardWrapper>
             <CardWrapper>
                 <CardContentWrapper>
                     <IconContainer>
-                        <Error fontSize="large"/>
+                        <Error fontSize="large" style={{ color: "rgb(217,39,39)" }}/>
                     </IconContainer>
                     <Typography gutterBottom variant="h5" component="div">
                         Reported Issues
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        452
+                        {totalRequests !== null ? totalRequests : "Loading..."}
                     </Typography>
                 </CardContentWrapper>
             </CardWrapper>
             <CardWrapper>
                 <CardContentWrapper>
                     <IconContainer>
-                        <CheckCircle fontSize="large"/>
+                        <CheckCircle fontSize="large" style={{ color: "rgb(47,124,22)" }}/>
                     </IconContainer>
                     <Typography gutterBottom variant="h5" component="div">
                         Resolved Issues
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        410
+                        {finishedRequests !== null ? finishedRequests : "Loading..."}
                     </Typography>
                 </CardContentWrapper>
             </CardWrapper>

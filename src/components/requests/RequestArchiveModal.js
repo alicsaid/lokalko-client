@@ -1,5 +1,6 @@
 import React from "react";
-import {Modal, Button} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
+import {Button} from "@mui/material";
 
 function RequestArchiveModal({show, handleClose, handleArchive, request}) {
     const handleArchiveClick = () => {
@@ -16,12 +17,14 @@ function RequestArchiveModal({show, handleClose, handleArchive, request}) {
                 <p>Are you sure you want to archive this request?</p>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Cancel
-                </Button>
-                <Button variant="warning" onClick={handleArchiveClick}>
-                    Archive
-                </Button>
+                <div className="modal-buttons">
+                    <Button className="close-button" variant="outlined" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button className="archive-button" variant="outlined" onClick={handleArchiveClick}>
+                        Archive
+                    </Button>
+                </div>
             </Modal.Footer>
         </Modal>
     );

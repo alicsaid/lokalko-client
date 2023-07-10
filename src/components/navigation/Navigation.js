@@ -1,33 +1,28 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
-import {
-    CDBSidebar,
-    CDBSidebarHeader,
-    CDBSidebarMenuItem,
-    CDBSidebarContent,
-    CDBSidebarMenu
-} from 'cdbreact';
+import {CDBSidebar, CDBSidebarContent, CDBSidebarHeader, CDBSidebarMenu, CDBSidebarMenuItem} from 'cdbreact';
 import {
     AppBar,
-    Toolbar,
-    IconButton,
-    Typography,
     Drawer,
+    IconButton,
     List,
     ListItem,
     ListItemIcon,
-    ListItemText
+    ListItemText,
+    Toolbar,
+    Typography
 } from '@mui/material';
 import {
-    Menu as MenuIcon,
-    Dashboard as DashboardIcon,
-    Check as CheckIcon,
-    Person as PersonIcon,
-    Build as BuildIcon,
     Archive as ArchiveIcon,
+    Build as BuildIcon,
+    Check as CheckIcon,
+    Dashboard as DashboardIcon,
     ExitToApp as ExitToAppIcon,
+    Menu as MenuIcon,
+    Person as PersonIcon,
     Settings as SettingsIcon
 } from '@mui/icons-material';
+import axios from "axios";
 
 
 const Navigation = () => {
@@ -36,6 +31,16 @@ const Navigation = () => {
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
+    };
+
+
+    const handleLogout = async () => {
+        try {
+            await axios.post('/admin/logout');
+            window.location.href = '/';
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -69,7 +74,7 @@ const Navigation = () => {
                             </Link>
                         </CDBSidebarMenu>
                         <CDBSidebarMenu>
-                            <Link to="/">
+                            <Link to="/" onClick={handleLogout}>
                                 <CDBSidebarMenuItem icon="sign-out-alt">Logout</CDBSidebarMenuItem>
                             </Link>
                         </CDBSidebarMenu>
@@ -137,7 +142,7 @@ const Navigation = () => {
                                 <ListItemText primary="Settings"/>
                             </ListItem>
                         </Link>
-                        <Link to="/" style={{textDecoration: 'none', color: 'inherit'}}>
+                        <Link to="/" onClick={handleLogout} style={{textDecoration: 'none', color: 'inherit'}}>
                             <ListItem button onClick={toggleDrawer}>
                                 <ListItemIcon>
                                     <ExitToAppIcon/>
