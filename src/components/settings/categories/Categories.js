@@ -11,8 +11,10 @@ import CategoryAddModal from "../../settings/categories/CategoryAddModal";
 
 // CSS
 import "../Settings.css";
+import {useNavigate} from "react-router-dom";
 
 const Categories = () => {
+    const navigate = useNavigate()
     const [rows, setRows] = useState([]);
     const [filteredRows, setFilteredRows] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -44,7 +46,13 @@ const Categories = () => {
     const handleDelete = (categoryId) => {
         console.log(categoryId)
         axios
-            .delete(`/admin/categories/${categoryId}/delete/`)
+            .delete(`/admin/categories/${categoryId}/delete/`,
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 console.log("Category deleted:", response.data);
                 setRows((prevRows) => prevRows.filter((row) => row.category_id !== categoryId));
@@ -52,6 +60,9 @@ const Categories = () => {
                 handleCloseModals();
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error deleting category:", error);
                 toast.error('Error deleting category!');
             });
@@ -68,7 +79,13 @@ const Categories = () => {
         };
 
         axios
-            .put(`/admin/categories/${category_id}/update/`, data)
+            .put(`/admin/categories/${category_id}/update/`
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+                , data)
             .then((response) => {
                 console.log("Category updated:", response.data);
 
@@ -82,6 +99,9 @@ const Categories = () => {
                 handleCloseModals();
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error updating category:", error);
                 toast.error("Error updating category!");
             });
@@ -98,7 +118,13 @@ const Categories = () => {
         };
 
         axios
-            .post("/admin/categories/create/", data)
+            .post("/admin/categories/create/"
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+                , data)
             .then((response) => {
                 console.log("Category added:", response.data);
 
@@ -111,6 +137,9 @@ const Categories = () => {
                 handleCloseModals();
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error adding category:", error);
                 toast.error('Error creating category!');
             });
@@ -118,7 +147,13 @@ const Categories = () => {
 
     useEffect(() => {
         axios
-            .get("/admin/categories/")
+            .get("/admin/categories/",
+            // {
+            //     headers: {
+            //         "authorization" : localStorage.getItem("token")
+            //     }
+            // }
+            )
             .then((response) => {
                 const categories = response.data.categories.map((category, index) => ({
                     ...category,
@@ -130,6 +165,9 @@ const Categories = () => {
 
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
     }, []);

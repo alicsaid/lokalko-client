@@ -8,11 +8,13 @@ const Settings = () => {
 
     return (
         <Layout>
-            <div className="page-header">
+@            <div className="page-header">
                 <h1>Settings</h1>
                 <h5>Here you can modify settings of the aplication.</h5>
             </div>
-            <Categories/>
+            <div style={{ display: "flex", flexDirection: "column", gap: "5rem"}}>
+                <Categories />
+            </div>
         </Layout>
     );
 };

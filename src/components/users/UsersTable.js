@@ -11,8 +11,10 @@ import UserDeleteModal from "./UserDeleteModal";
 
 // CSS
 import "./Users.css";
+import {useNavigate} from "react-router-dom";
 
 function UsersTable() {
+    const navigate = useNavigate()
     const [rows, setRows] = useState([]);
     const [filteredRows, setFilteredRows] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -37,7 +39,13 @@ function UsersTable() {
 
     const handleDelete = (userId) => {
         axios
-            .delete(`/admin/users/${userId}/delete/`)
+            .delete(`/admin/users/${userId}/delete/`,
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 console.log("User deleted");
                 setRows((prevRows) => prevRows.filter((row) => row.user_id !== userId));
@@ -45,6 +53,9 @@ function UsersTable() {
                 handleCloseModals();
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error deleting user:", error);
                 toast.error('Error deleting user!');
             });
@@ -63,7 +74,13 @@ function UsersTable() {
 
     useEffect(() => {
         axios
-            .get("/admin/users")
+            .get("/admin/users",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 const users = response.data.users.map((user, index) => ({
                     ...user,
@@ -72,6 +89,9 @@ function UsersTable() {
                 setRows(users);
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
     }, []);
@@ -133,17 +153,17 @@ function UsersTable() {
                                             variant="primary"
                                             size="small"
                                             onClick={() => handleOpenDetailsModal(row)}
-                                            style={{ color: "#3B9AFF" }}
+                                            style={{color: "#3B9AFF"}}
                                         >
-                                            <Info />
+                                            <Info/>
                                         </Button>
                                         <Button
                                             variant="danger"
                                             size="small"
                                             onClick={() => handleOpenDeleteModal(row)}
-                                            style={{ color: "#DC3545" }}
+                                            style={{color: "#DC3545"}}
                                         >
-                                            <Delete />
+                                            <Delete/>
                                         </Button>
                                     </TableCell>
                                 </TableRow>

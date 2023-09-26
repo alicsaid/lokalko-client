@@ -21,8 +21,10 @@ import ServiceAddModal from "./ServiceAddModal";
 
 // CSS
 import "./Services.css";
+import {useNavigate} from "react-router-dom";
 
 function ServicesTable() {
+    const navigate = useNavigate()
     const [rows, setRows] = useState([]);
     const [filteredRows, setFilteredRows] = useState([]);
     const [selectedService, setSelectedService] = useState(null);
@@ -60,7 +62,13 @@ function ServicesTable() {
 
     const handleDelete = (serviceId) => {
         axios
-            .delete(`/admin/services/${serviceId}/delete/`)
+            .delete(`/admin/services/${serviceId}/delete/`,
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 console.log("Service deleted:", response.data);
                 setRows((prevRows) => prevRows.filter((row) => row.service_id !== serviceId));
@@ -68,42 +76,11 @@ function ServicesTable() {
                 handleCloseModals();
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error deleting service:", error);
                 toast.error('Error deleting service!');
-            });
-    };
-
-    const handleSave = (updatedService) => {
-        console.log("Saving updated service:", updatedService);
-
-        const { service_id, service, address, city, telephone } = updatedService;
-
-        const data = {
-            service_id,
-            service,
-            address,
-            city,
-            telephone,
-        };
-
-        axios
-            .put(`/admin/services/${service_id}/update/`, data)
-            .then((response) => {
-                console.log("Service updated:", response.data);
-
-                // Update the rows state with the updated service
-                setRows((prevRows) =>
-                    prevRows.map((row) =>
-                        row.service_id === service_id ? { ...row, ...updatedService } : row
-                    )
-                );
-
-                toast.success("Service updated!");
-                handleCloseModals();
-            })
-            .catch((error) => {
-                console.error("Error updating service:", error);
-                toast.error("Error updating service!");
             });
     };
 
@@ -121,17 +98,26 @@ function ServicesTable() {
         };
 
         axios
-            .post("/admin/services/create/", data)
+            .post("/admin/services/create/"
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+                , data)
             .then((response) => {
                 console.log("Service added:", response.data);
                 const newIndex = rows.length + 1;
 
-                const newServiceWithIndex = { ...newService, index: newIndex };
+                const newServiceWithIndex = {...newService, index: newIndex};
                 setRows((prevRows) => [...prevRows, newServiceWithIndex]);
                 toast.success('Service created!');
                 handleCloseModals();
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error adding service:", error);
                 toast.error('Error creating service!');
             });
@@ -143,7 +129,13 @@ function ServicesTable() {
 
     useEffect(() => {
         axios
-            .get("/admin/services")
+            .get("/admin/services",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 const services = response.data.services.map((service, index) => ({
                     ...service,
@@ -154,6 +146,9 @@ function ServicesTable() {
                 setFilteredRows(services);
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
     }, []);
@@ -238,9 +233,9 @@ function ServicesTable() {
                                                 variant="warning"
                                                 size="small"
                                                 onClick={() => handleOpenEditModal(row)}
-                                                style={{ color: "#FFC107" }}
+                                                style={{color: "#FFC107"}}
                                             >
-                                                <Edit />
+                                                <Edit/>
                                             </Button>
                                             <Button
                                                 variant="danger"
@@ -275,7 +270,7 @@ function ServicesTable() {
             <ServiceEditModal
                 show={showEditModal}
                 handleClose={handleCloseModals}
-                handleSave={handleSave}
+                setRows={setRows}
                 service={selectedService}
             />
 

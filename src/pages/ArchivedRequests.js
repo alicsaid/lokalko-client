@@ -9,8 +9,8 @@ const Analytics = () => {
     return (
         <Layout>
             <div className="page-header">
-                <h1>Archived requests</h1>
-                <h5>This is a list of all archived requests.</h5>
+                <h1>Archived reports</h1>
+                <h5>This is a list of all archived reports.</h5>
             </div>
             <ArchivedRequestsTable/>
         </Layout>

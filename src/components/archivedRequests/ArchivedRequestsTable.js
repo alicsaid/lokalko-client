@@ -12,8 +12,10 @@ import ArchivedRequestDeleteModal from "./ArchivedRequestDeleteModal";
 
 // CSS
 import "../archivedRequests/ArchivedRequests.css";
+import {useNavigate} from "react-router-dom";
 
 function ArchivedRequestsTable() {
+    const navigate = useNavigate()
     const [rows, setRows] = useState([]);
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -36,7 +38,13 @@ function ArchivedRequestsTable() {
 
     useEffect(() => {
         axios
-            .get("/admin/archived-requests")
+            .get("/admin/archived-requests",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 const archivedRequests = response.data.archivedRequests.map((request, index) => ({
                     ...request,
@@ -45,19 +53,31 @@ function ArchivedRequestsTable() {
                 setRows(archivedRequests);
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
     }, []);
 
     const handleDelete = (requestId) => {
         axios
-            .delete(`/admin/archived-requests/${requestId}/delete`)
+            .delete(`/admin/archived-requests/${requestId}/delete`,
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 console.log("Archived request deleted:", requestId);
                 setRows((prevRows) => prevRows.filter((row) => row.request_id !== requestId));
                 toast.success('Archived request deleted!');
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error deleting archived request:", error);
                 toast.error('Error deleting archived request!');
             });

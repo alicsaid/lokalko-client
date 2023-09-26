@@ -12,8 +12,10 @@ import RequestDeleteModal from "./RequestDeleteModal";
 
 // CSS
 import "./Requests.css";
+import {useNavigate} from "react-router-dom";
 
 function RequestsTable() {
+    const navigate = useNavigate()
     const [rows, setRows] = useState([]);
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -43,7 +45,13 @@ function RequestsTable() {
 
     useEffect(() => {
         axios
-            .get("/admin/requests")
+            .get("/admin/requests",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 const requests = response.data.requests.map((request, index) => ({
                     ...request,
@@ -53,19 +61,31 @@ function RequestsTable() {
                 //console.log(requests)
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
     }, []);
 
     const handleArchive = (requestId) => {
         axios
-            .patch(`/admin/requests/${requestId}/archive`)
+            .patch(`/admin/requests/${requestId}/archive`,
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 console.log("Request archived:", requestId);
                 setRows((prevRows) => prevRows.filter((row) => row.request_id !== requestId));
                 toast.success('Request archived!');
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error archiving request:", error);
                 toast.error('Error archiving request!');
             });
@@ -75,51 +95,27 @@ function RequestsTable() {
 
     const handleDelete = (requestId) => {
         axios
-            .delete(`/admin/requests/${requestId}/delete`)
+            .delete(`/admin/requests/${requestId}/delete`,
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 console.log("Request deleted:", requestId);
                 setRows((prevRows) => prevRows.filter((row) => row.request_id !== requestId));
                 toast.success('Request deleted!');
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error("Error deleting request:", error);
                 toast.error('Error deleting request!');
             });
 
         handleCloseModals();
-    };
-
-    const handleSave = (updatedRequest) => {
-        console.log("Saving updated request:", updatedRequest);
-
-        const {request_id, category, service, severity, status} = updatedRequest;
-
-        const data = {
-            request_id,
-            category,
-            service,
-            severity,
-            status
-        };
-
-        axios
-            .patch(`/admin/requests/${request_id}/update`, data)
-            .then((response) => {
-                console.log("Request updated:", response.data);
-
-                setRows((prevRows) =>
-                    prevRows.map((row) =>
-                        row.request_id === request_id ? {...row, ...updatedRequest} : row
-                    )
-                );
-
-                toast.success("Request updated!");
-                handleCloseModals();
-            })
-            .catch((error) => {
-                console.error("Error updating request:", error);
-                toast.error("Error updating request!");
-            });
     };
 
     const columns = [
@@ -163,12 +159,15 @@ function RequestsTable() {
                                         <span className={`severity-${row.severity.toLowerCase()}`}>{row.severity}</span>
                                     </TableCell>
                                     <TableCell align="center">
-                                        {row.service ? (
+                                        {row.service === "Unassigned" ? (
+                                            <span style={{color: "#DC3545", fontWeight: "bold"}}>NO</span>
+                                        ) : row.service ? (
                                             <span style={{color: "#188130", fontWeight: "bold"}}>YES</span>
                                         ) : (
                                             <span style={{color: "#DC3545", fontWeight: "bold"}}>NO</span>
                                         )}
                                     </TableCell>
+
                                     <TableCell align="center">
                                         <span
                                             className={`status-${row.status.toLowerCase().replace(/\s/g, '-')}`}>{row.status}</span>
@@ -209,7 +208,7 @@ function RequestsTable() {
             <RequestDetailsModal
                 show={showDetailsModal}
                 handleClose={handleCloseModals}
-                handleSave={handleSave}
+                setRows={setRows}
                 request={selectedRequest}
             />
 

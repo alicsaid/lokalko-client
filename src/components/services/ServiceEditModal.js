@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {Modal} from "react-bootstrap";
 import {TextField, Button} from "@mui/material";
+import axios from "axios";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
-function ServiceEditModal({show, handleClose, service, handleSave}) {
+function ServiceEditModal({show, handleClose, setRows, service}) {
+    const navigate = useNavigate()
     const [serviceName, setServiceName] = useState("");
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [telephone, setTelephone] = useState("");
+
+    console.log("service:", service);
 
     useEffect(() => {
         if (service) {
@@ -16,6 +22,49 @@ function ServiceEditModal({show, handleClose, service, handleSave}) {
             setTelephone(service.telephone || "");
         }
     }, [service]);
+
+    const handleSave = (updatedService) => {
+        console.log("Saving updated service:", updatedService);
+
+        const { service_id, service, address, city, telephone } = updatedService;
+
+        const data = {
+            service_id,
+            service,
+            address,
+            city,
+            telephone,
+        };
+
+        axios
+            .put(`/admin/services/${service_id}/update/`
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+                , data)
+            .then((response) => {
+                console.log("Service updated:", response.data);
+
+                // Update the rows state with the updated service
+                setRows((prevRows) =>
+                    prevRows.map((row) =>
+                        row.service_id === service_id ? { ...row, ...updatedService } : row
+                    )
+                );
+
+                toast.success("Service updated!");
+                handleClose();
+            })
+            .catch((error) => {
+                if(error.response?.status === 401) {
+                    navigate("/not-found");
+                }
+                console.error("Error updating service:", error);
+                toast.error("Error updating service!");
+            });
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();

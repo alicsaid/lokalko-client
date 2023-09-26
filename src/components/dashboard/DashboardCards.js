@@ -4,22 +4,33 @@ import {Card, CardContent, Typography} from "@mui/material";
 import {styled} from "@mui/system";
 import {AutoAwesomeMotion, CheckCircle, People, Error} from "@mui/icons-material";
 import axios from "axios";
+import {useNavigate} from 'react-router-dom'
 
 const DashboardCards = () => {
 
+    const navigate = useNavigate()
     const [userData, setUserData] = useState(null);
     const [totalRequests, setTotalRequests] = useState(null);
     const [finishedRequests, setFinishedRequests] = useState(null);
 
     useEffect(() => {
         axios
-            .get("/admin/dashboard-analytics/")
+            .get("/admin/dashboard-analytics/",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 setUserData(response.data.userData[0].usercount);
                 setTotalRequests(response.data.totalRequests[0].totalrequests);
                 setFinishedRequests(response.data.finishedRequests[0].finishedrequests);
             })
             .catch((error) => {
+                if(error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.log(error);
             });
     }, []);

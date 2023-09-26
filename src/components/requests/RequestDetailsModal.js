@@ -2,8 +2,11 @@ import React, {useState, useEffect} from "react";
 import {Modal} from "react-bootstrap";
 import {Button, TextField, FormControl, InputLabel, Select, MenuItem, Box} from "@mui/material";
 import axios from "axios";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
-function RequestDetailsModal({show, handleClose, handleSave, request}) {
+function RequestDetailsModal({show, handleClose, setRows, request}) {
+    const navigate = useNavigate()
     const [services, setServices] = useState([]);
     const [statuses, setStatuses] = useState([]);
     const [severities, setSeverities] = useState([]);
@@ -13,11 +16,17 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
     const [severity, setSeverity] = useState("");
     const [status, setStatus] = useState("");
 
-    //console.log("category:", category);
+    console.log("request:", request);
 
     useEffect(() => {
         axios
-            .get("/admin/services")
+            .get("/admin/services",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 const services = response.data.services.map((service) => ({
                     id: service.service_id,
@@ -26,11 +35,20 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
                 setServices(services);
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
 
         axios
-            .get("/admin/statuses")
+            .get("/admin/statuses",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 const statuses = response.data.statuses.map((status) => ({
                     id: status.status_id,
@@ -39,24 +57,43 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
                 setStatuses(statuses);
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
 
         axios
-            .get("/admin/severities")
+            .get("/admin/severities",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 const severities = response.data.severities.map((severity) => ({
                     id: severity.severity_id,
                     severity: severity.severity,
                 }));
                 setSeverities(severities);
+                console.log(severities);
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
 
         axios
-            .get("/admin/categories")
+            .get("/admin/categories",
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+            )
             .then((response) => {
                 const categories = response.data.categories.map((category) => ({
                     id: category.category_id,
@@ -65,16 +102,19 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
                 setCategories(categories);
             })
             .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
                 console.error(error);
             });
     }, []);
 
     useEffect(() => {
         if (request) {
-            setCategory(request.category || "");
-            setService(request.service || "");
-            setSeverity(request.severity || "");
-            setStatus(request.status || "");
+            setCategory(request.category_id || "");
+            setService(request.service_id || "");
+            setSeverity(request.severity_id || "");
+            setStatus(request.status_id || "");
         }
     }, [request]);
 
@@ -92,6 +132,73 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
 
     const handleStatusChange = (event) => {
         setStatus(event.target.value);
+    };
+
+    const getStatusById = (statusId) =>
+        statuses.find(({id}) => id === statusId).status;
+
+    const getSeverityById = (severityId) =>
+        severities.find(({id}) => id === severityId).severity;
+
+    const getCategoryById = (categoryId) =>
+        categories.find(({id}) => id === categoryId).category;
+
+    const getServiceById = (serviceId) =>
+        services.find(({id}) => id === serviceId).service;
+
+    const handleSave = (updatedRequest) => {
+        console.log("Saving updated request:", updatedRequest);
+
+        const {request_id, category, service, severity, status} = updatedRequest;
+
+        const data = {
+            request_id,
+            category,
+            service,
+            severity,
+            status
+        };
+
+        axios
+            .patch(`/admin/requests/${request_id}/update`
+                // {
+                //     headers: {
+                //         "authorization" : localStorage.getItem("token")
+                //     }
+                // }
+                , data)
+            .then((response) => {
+                console.log("Request updated:", response.data);
+
+                const adjustedRow = {
+                    request_id,
+                    ...data,
+                    status_id: status,
+                    status: getStatusById(status),
+                    severity_id: severity,
+                    severity: getSeverityById(severity),
+                    category_id: category,
+                    category: getCategoryById(category),
+                    service_id: service,
+                    service: getServiceById(service)
+                };
+
+                setRows((prevRows) =>
+                    prevRows.map((row) =>
+                        row.request_id === request_id ? {...row, ...adjustedRow} : row
+                    )
+                );
+
+                toast.success("Request updated!");
+                handleClose();
+            })
+            .catch((error) => {
+                if (error.response?.status === 401) {
+                    navigate("/not-found");
+                }
+                console.error("Error updating request:", error);
+                toast.error("Error updating request!");
+            });
     };
 
     const handleSubmit = (event) => {
@@ -169,7 +276,7 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
                             label="Category"
                         >
                             {categories?.map((category) => (
-                                <MenuItem key={category.id} value={category.category}>
+                                <MenuItem key={category.id} value={category.id}>
                                     {category.category}
                                 </MenuItem>
                             ))}
@@ -188,7 +295,7 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
                         >
                             <MenuItem value="">Select a service</MenuItem>
                             {services?.map((service) => (
-                                <MenuItem key={service.id} value={service.service}>
+                                <MenuItem key={service.id} value={service.id}>
                                     {service.service}
                                 </MenuItem>
                             ))}
@@ -206,7 +313,7 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
                             label="Severity"
                         >
                             {severities?.map((severity) => (
-                                <MenuItem key={severity.id} value={severity.severity}>
+                                <MenuItem key={severity.id} value={severity.id}>
                                     {severity.severity}
                                 </MenuItem>
                             ))}
@@ -224,7 +331,7 @@ function RequestDetailsModal({show, handleClose, handleSave, request}) {
                             label="Status"
                         >
                             {statuses?.map((status) => (
-                                <MenuItem key={status.id} value={status.status}>
+                                <MenuItem key={status.id} value={status.id}>
                                     {status.status}
                                 </MenuItem>
                             ))}

@@ -1,8 +1,15 @@
-import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
-import {CDBSidebar, CDBSidebarContent, CDBSidebarHeader, CDBSidebarMenu, CDBSidebarMenuItem} from 'cdbreact';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+    CDBSidebar,
+    CDBSidebarContent,
+    CDBSidebarHeader,
+    CDBSidebarMenu,
+    CDBSidebarMenuItem,
+} from 'cdbreact';
 import {
     AppBar,
+    Button,
     Drawer,
     IconButton,
     List,
@@ -10,8 +17,9 @@ import {
     ListItemIcon,
     ListItemText,
     Toolbar,
-    Typography
+    Typography,
 } from '@mui/material';
+import { Modal } from 'react-bootstrap';
 import {
     Archive as ArchiveIcon,
     Build as BuildIcon,
@@ -20,19 +28,17 @@ import {
     ExitToApp as ExitToAppIcon,
     Menu as MenuIcon,
     Person as PersonIcon,
-    Settings as SettingsIcon
+    Settings as SettingsIcon,
 } from '@mui/icons-material';
-import axios from "axios";
-
+import axios from 'axios';
 
 const Navigation = () => {
-
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
-
 
     const handleLogout = async () => {
         try {
@@ -58,10 +64,10 @@ const Navigation = () => {
                                 <CDBSidebarMenuItem icon="th-large">Dashboard</CDBSidebarMenuItem>
                             </Link>
                             <Link to="/requests">
-                                <CDBSidebarMenuItem icon="check">Requests</CDBSidebarMenuItem>
+                                <CDBSidebarMenuItem icon="check">All Reports</CDBSidebarMenuItem>
                             </Link>
                             <Link to="/archived-requests">
-                                <CDBSidebarMenuItem icon="archive">Archived requests</CDBSidebarMenuItem>
+                                <CDBSidebarMenuItem icon="archive">Archived reports</CDBSidebarMenuItem>
                             </Link>
                             <Link to="/users">
                                 <CDBSidebarMenuItem icon="user">Users</CDBSidebarMenuItem>
@@ -74,7 +80,7 @@ const Navigation = () => {
                             </Link>
                         </CDBSidebarMenu>
                         <CDBSidebarMenu>
-                            <Link to="/" onClick={handleLogout}>
+                            <Link to="" onClick={() => setShowLogoutModal(true)}>
                                 <CDBSidebarMenuItem icon="sign-out-alt">Logout</CDBSidebarMenuItem>
                             </Link>
                         </CDBSidebarMenu>
@@ -107,7 +113,7 @@ const Navigation = () => {
                                 <ListItemIcon>
                                     <CheckIcon/>
                                 </ListItemIcon>
-                                <ListItemText primary="Requests"/>
+                                <ListItemText primary="All Reports"/>
                             </ListItem>
                         </Link>
                         <Link to="/archived-requests" style={{textDecoration: 'none', color: 'inherit'}}>
@@ -115,7 +121,7 @@ const Navigation = () => {
                                 <ListItemIcon>
                                     <ArchiveIcon/>
                                 </ListItemIcon>
-                                <ListItemText primary="Archived requests"/>
+                                <ListItemText primary="Archived reports"/>
                             </ListItem>
                         </Link>
                         <Link to="/users" style={{textDecoration: 'none', color: 'inherit'}}>
@@ -142,7 +148,8 @@ const Navigation = () => {
                                 <ListItemText primary="Settings"/>
                             </ListItem>
                         </Link>
-                        <Link to="/" onClick={handleLogout} style={{textDecoration: 'none', color: 'inherit'}}>
+                        <Link to="/" onClick={() => setShowLogoutModal(true)}
+                              style={{textDecoration: 'none', color: 'inherit'}}>
                             <ListItem button onClick={toggleDrawer}>
                                 <ListItemIcon>
                                     <ExitToAppIcon/>
@@ -153,8 +160,37 @@ const Navigation = () => {
                     </List>
                 </Drawer>
             </div>
+            <LogoutModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                onConfirm={handleLogout}
+            />
         </div>
     )
+};
+
+
+const LogoutModal = ({ isOpen, onClose, onConfirm }) => {
+    return (
+        <Modal show={isOpen} onHide={onClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Logout Confirmation</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>Are you sure you want to logout?</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <div className="modal-buttons">
+                    <Button className="close-button" variant="outlined" onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button className="delete-button" variant="outlined" onClick={onConfirm}>
+                        Logout
+                    </Button>
+                </div>
+            </Modal.Footer>
+        </Modal>
+    );
 };
 
 export default Navigation;
